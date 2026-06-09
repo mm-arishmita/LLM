@@ -164,7 +164,7 @@ __kernel void __REDEFINE_main() {
      *   InvFreq will signal both after computing inv_freq[].
      *   We pass CosCacheFr sync slot; InvFreq also signals SinCacheFr directly. */
     __writeCM(re_opAddr(InvFreqFr, 0), re_opAddr(CosCacheFr, 15));
-    __writeCM(re_opAddr(InvFreqFr, 0), re_opAddr(SinCacheFr, 15));
+    __writeCM(re_opAddr(InvFreqFr, 1), re_opAddr(SinCacheFr, 15));
 
     /* ── Write CosCache operand (blocked until InvFreq signals) ─────────────── */
     /*   Slot 0: sync addr of RoPELaunch — CosCache signals it when done.       */
@@ -193,7 +193,7 @@ __hyperOp__ void InvFreqOp(__Op32 cosFr, __Op32 sinFr) {
     __sync(cosFr.cmAddr, -1);
 
     /* Signal SinCache: same inv_freq[] is ready.               */
-    __sync(re_opAddr(sinFr.cmAddr, 15), -1);
+    __sync(sinFr.cmAddr, -1);
 }
 
 /* =============================================================================
