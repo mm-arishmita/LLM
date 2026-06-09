@@ -1,0 +1,22 @@
+layer=1
+token_pos=0
+seq_len=1
+q_heads=24
+kv_heads=8
+kv_groups=3
+head_dim=128
+
+File layout (all float32, row-major):
+
+  --- Attention Score Kernel ---
+  Q.bin       : [24][128]
+  K.bin       : [24][1][128]
+  scores.bin  : [24][1]  (raw logits)
+
+  --- Weighted Sum Kernel ---
+  softmax.bin : [24][1]  (after softmax, rows sum to 1)
+  V.bin       : [24][1][128]
+  ctx.bin     : [24][128]  (golden weighted sum output)
+
+Compile with:
+  -DSEQ_LEN=1 -DATTN_HEADS=24 -DHEAD_DIM=128
