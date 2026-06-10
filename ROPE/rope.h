@@ -2,10 +2,10 @@
 #define ROPE_H
 
 /* Number of Q attention heads. */
-#define N_Q_HEADS   2
+#define N_Q_HEADS   24
 
 /* Number of KV attention heads. */
-#define N_KV_HEADS  2
+#define N_KV_HEADS  8
 
 /* Dimension of each head vector. */
 #define HEAD_DIM    128

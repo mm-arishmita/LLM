@@ -62,7 +62,7 @@ __CMAddr KRopeFr[N_KV_HEADS];
 __kernel void __REDEFINE_main() {
 
     __CMAddr EndFr = __createInst(&smd_End);
-    __sync(re_opAddr(EndFr, 15), 4);
+    __sync(re_opAddr(EndFr, 15), N_Q_HEADS + N_KV_HEADS);
 
     RoPELaunchFr = __createInst(&smd_RoPELaunch);
     __sync(re_opAddr(RoPELaunchFr, 15), 2);   /* 2 = CosCache + SinCache      */
