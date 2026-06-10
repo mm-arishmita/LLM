@@ -5,13 +5,6 @@
 
 /* =============================================================================
  * DEVICE BUFFER DECLARATIONS
- * =============================================================================
- * Q_in  : [N_Q_HEADS][HEAD_DIM]   — query vectors before rotation
- * K_in  : [N_KV_HEADS][HEAD_DIM]  — key vectors before rotation
- * Q_out : [N_Q_HEADS][HEAD_DIM]   — rotated query vectors (chip output)
- * K_out : [N_KV_HEADS][HEAD_DIM]  — rotated key vectors  (chip output)
- *
- * position : scalar token index — determines rotation angle
  * =============================================================================*/
 extern mat_t Q_in[N_Q_HEADS][HEAD_DIM];
 extern mat_t K_in[N_KV_HEADS][HEAD_DIM];
@@ -34,20 +27,6 @@ static mat_t manual_K_out[N_KV_HEADS][HEAD_DIM];
 
 /* =============================================================================
  * MANUAL REFERENCE IMPLEMENTATION
- *
- * Mirrors apply_rope_single() from original C code exactly.
- * Computed on host CPU before chip launch — used for verification.
- *
- * Steps:
- *   1. Compute inv_freq[i] = 1 / ROPE_THETA ^ (2i / ROTARY_DIM)
- *   2. Compute cos_cache[i] = cos(inv_freq[i] * position)
- *              sin_cache[i] = sin(inv_freq[i] * position)
- *   3. Rotate each Q head:
- *        a = Q_in[h][i],   b = Q_in[h][i + HALF]
- *        Q_out[h][i]        = a*c - b*s
- *        Q_out[h][i + HALF] = b*c + a*s
- *   4. Same for each K head.
- *   5. Pass-through dims [ROTARY_DIM, HEAD_DIM) unchanged.
  * =============================================================================*/
 static void manual_rope(void) {
     /* Step 1 + 2: inv_freq, cos, sin. */
@@ -102,13 +81,6 @@ static void manual_rope(void) {
 
 int main() {
 
-    /* -------------------------------------------------------------------------
-     * 1. Set token position.
-     *    position = 0  → no rotation  (angle = 0 for all dims)
-     *    position = 1  → rotate by inv_freq[i]
-     *    position = 4  → rotate by 4 * inv_freq[i]
-     *    Change this to test different token positions.
-     * -------------------------------------------------------------------------*/
     position = 4;
 
     printf("=== RoPE Kernel Test ===\n");
@@ -117,12 +89,6 @@ int main() {
     printf("ROTARY_DIM=%d  HALF=%d  ROPE_THETA=%.0f  position=%d\n\n",
            ROTARY_DIM, HALF, (float)ROPE_THETA, position);
 
-    /* -------------------------------------------------------------------------
-     * 2. Initialise Q_in  [N_Q_HEADS][HEAD_DIM].
-     *    Each head gets a distinct pattern:
-     *      Q_in[h][d] = (h + 1) * (d + 1) / HEAD_DIM
-     *    Mirrors att_main.c Q initialisation pattern.
-     * -------------------------------------------------------------------------*/
     for (int h = 0; h < N_Q_HEADS; h++) {
         for (int d = 0; d < HEAD_DIM; d++) {
             Q_in[h][d] = (float)((h + 1) * (d + 1)) / (float)HEAD_DIM;
@@ -132,12 +98,6 @@ int main() {
         }
     }
 
-    /* -------------------------------------------------------------------------
-     * 3. Initialise K_in  [N_KV_HEADS][HEAD_DIM].
-     *    Even heads: alternating 1/0 pattern.
-     *    Odd  heads: linear ramp.
-     *    Mirrors att_main.c K initialisation pattern.
-     * -------------------------------------------------------------------------*/
     for (int h = 0; h < N_KV_HEADS; h++) {
         for (int d = 0; d < HEAD_DIM; d++) {
             if (h % 2 == 0) {
@@ -152,12 +112,12 @@ int main() {
     }
 
     /* -------------------------------------------------------------------------
-     * 4. Manual RoPE computation on host (reference for verification).
+     * Manual RoPE computation on host (reference for verification).
      * -------------------------------------------------------------------------*/
     manual_rope();
 
     /* -------------------------------------------------------------------------
-     * 5. Launch the HyperOps kernel on the Redefine IP chip.
+     * Launch the HyperOps kernel on the Redefine IP chip.
      * -------------------------------------------------------------------------*/
     printf("--- Launching HyperOps kernel ---\n");
     redefine_initialize(1, 1);
@@ -167,7 +127,7 @@ int main() {
     printf("Kernel execution complete.\n\n");
 
     /* -------------------------------------------------------------------------
-     * 6. Validate chip Q_out against manual reference.
+     * Validate Q_out against manual reference.
      * -------------------------------------------------------------------------*/
     int valid = 1;
 
@@ -186,7 +146,7 @@ int main() {
     }
 
     /* -------------------------------------------------------------------------
-     * 7. Validate chip K_out against manual reference.
+     * Validate K_out against manual reference.
      * -------------------------------------------------------------------------*/
     for (int h = 0; h < N_KV_HEADS; h++) {
         for (int d = 0; d < HEAD_DIM; d++) {
@@ -203,7 +163,7 @@ int main() {
     }
 
     /* -------------------------------------------------------------------------
-     * 8. Print final result.
+     * Print final result.
      * -------------------------------------------------------------------------*/
     if (valid)
         printf("RoPE computation successful.\n");
