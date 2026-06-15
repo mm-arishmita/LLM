@@ -29,11 +29,10 @@ DeviceName targetDevice = rsim_hyperop;    /* RTL simulator / FPGA */
  * HOST BUFFER DECLARATIONS
  * =============================================================================*/
 
-static mat_t Scores[ATTN_HEADS][SEQ_LEN];                  /* Softmax weights (input)    */
-static mat_t V[SEQ_LEN][HEAD_DIM];             /* Value cache    (input)     */
-//static mat_t partials_v[ATTN_HEADS][CE_USE_NUM][HEAD_DIM]; /* CE scratch                 */
-static mat_t Ctx[ATTN_HEADS][HEAD_DIM];                    /* Output: context vectors    */
-static mat_t manual_ctx[ATTN_HEADS][HEAD_DIM];
+static mat_t Scores     [ATTN_HEADS][SEQ_LEN];                 
+static mat_t V          [SEQ_LEN][HEAD_DIM];            
+static mat_t Ctx        [ATTN_HEADS][HEAD_DIM];                  
+static mat_t manual_ctx [ATTN_HEADS][HEAD_DIM];
 
 /* =============================================================================
  * TIMING / PROFILING HELPERS
@@ -100,7 +99,7 @@ static void manual_weighted_sum() {
         for (int d = 0; d < HEAD_DIM; d++) {
             float acc = 0.0;
             for (int tok = 0; tok < SEQ_LEN; tok++) {
-                acc += (float)Scores[h][tok] * (float)V[h][tok][d];
+                acc += (float)Scores[h][tok] * (float)V[tok][d];
             }
             manual_ctx[h][d] = (float)acc;
 
@@ -190,12 +189,12 @@ static int run_wsum(void)
     size_t sz_partials = sizeof(mat_t) * ATTN_HEADS * CE_USE_NUM * HEAD_DIM;
     size_t sz_ctx      = sizeof(mat_t) * ATTN_HEADS * HEAD_DIM;
 
-    cl_mem dev_Q = clCreateBuffer(contextId,
+    cl_mem dev_Scores = clCreateBuffer(contextId,
                                   CL_MEM_READ_ONLY,
                                   sz_Scores, NULL, &error);
     checkErr(error, "clCreateBuffer dev_Scores");
 
-    cl_mem dev_K = clCreateBuffer(contextId,
+    cl_mem dev_V = clCreateBuffer(contextId,
                                   CL_MEM_READ_ONLY,
                                   sz_V, NULL, &error);
     checkErr(error, "clCreateBuffer dev_V");
@@ -205,7 +204,7 @@ static int run_wsum(void)
                                           sz_partials, NULL, &error);
     checkErr(error, "clCreateBuffer dev_partials");
 
-    cl_mem dev_Scores   = clCreateBuffer(contextId,
+    cl_mem dev_ctx   = clCreateBuffer(contextId,
                                           CL_MEM_WRITE_ONLY,
                                           sz_ctx, NULL, &error);
     checkErr(error, "clCreateBuffer dev_ctx");
@@ -288,7 +287,7 @@ static int run_wsum(void)
      * ------------------------------------------------------------------ */
     int valid = 1;
     for (int h = 0; h < ATTN_HEADS; h++) {
-        for (int d = 0; t < HEAD_DIM; d++) {
+        for (int d = 0; d < HEAD_DIM; d++) {
             if (Ctx[h][d] != manual_ctx[h][d]) {
                 valid = 0;
                 printf("[MISMATCH] Ctx[%d][%d]: chip=%f  ref=%f\n",
@@ -379,19 +378,17 @@ int main(void) {
      *                                   : (float)(d + 1) / HEAD_DIM      (ramp)
      *    (mirrors K initialisation pattern from att_main.c)
      * -------------------------------------------------------------------------*/
-    for (int h = 0; h < ATTN_HEADS; h++) {
         for (int tok = 0; tok < SEQ_LEN; tok++) {
             for (int d = 0; d < HEAD_DIM; d++) {
                 if (tok % 2 == 0) {
                     /* Even tokens: alternating 1/0 pattern. */
-                    V[h][tok][d] = (d % 2 == 0) ? 1.0f : 0.0f;
+                    V[tok][d] = (d % 2 == 0) ? 1.0f : 0.0f;
                 } else {
                     /* Odd tokens: linear ramp. */
-                    V[h][tok][d] = (float)(d + 1) / (float)HEAD_DIM;
+                    V[tok][d] = (float)(d + 1) / (float)HEAD_DIM;
                 }
             }
         }
-    }
 
     /* -------------------------------------------------------------------------
      * 3. Manual weighted sum computation.
