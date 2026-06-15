@@ -1,4 +1,4 @@
-#ifndef ATT_WSUM_H
+*#ifndef ATT_WSUM_H
 #define ATT_WSUM_H
 
 /* Dimension of each V vector (head dimension). */
