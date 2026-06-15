@@ -1,0 +1,19 @@
+4613260688372 | EV ID 2 | DEV 1 | CQ 3 | migrate_mem_objects | queued |  # MEMS 1 | MEM 0 ID 7 | FROM DEV HOST | TO DEV 1 |
+4613291412311 | EV ID 2 | DEV 1 | CQ 3 | migrate_mem_objects | submitted |  # MEMS 1 | MEM 0 ID 7 | FROM DEV HOST | TO DEV 1 |
+4614589510926 | EV ID 2 | DEV 1 | CQ 3 | migrate_mem_objects | running |  # MEMS 1 | MEM 0 ID 7 | FROM DEV HOST | TO DEV 1 |
+4614589511936 | EV ID 2 | DEV 1 | CQ 3 | migrate_mem_objects | complete |  # MEMS 1 | MEM 0 ID 7 | FROM DEV HOST | TO DEV 1 |
+4613260756533 | EV ID 3 | DEV 1 | CQ 3 | migrate_mem_objects | queued |  # MEMS 1 | MEM 0 ID 8 | FROM DEV HOST | TO DEV 1 |
+4613291434723 | EV ID 3 | DEV 1 | CQ 3 | migrate_mem_objects | submitted |  # MEMS 1 | MEM 0 ID 8 | FROM DEV HOST | TO DEV 1 |
+4614589552237 | EV ID 3 | DEV 1 | CQ 3 | migrate_mem_objects | running |  # MEMS 1 | MEM 0 ID 8 | FROM DEV HOST | TO DEV 1 |
+4614589552347 | EV ID 3 | DEV 1 | CQ 3 | migrate_mem_objects | complete |  # MEMS 1 | MEM 0 ID 8 | FROM DEV HOST | TO DEV 1 |
+DEP | EV ID 2 -> EV ID 3
+4613260805613 | EV ID 1 | DEV 1 | CQ 4 | ndrange_kernel | queued | KERNEL ID 6 | name=att_start
+4614589499939 | EV ID 1 | DEV 1 | CQ 4 | ndrange_kernel | submitted | KERNEL ID 6 | name=att_start
+4614639327060 | EV ID 1 | DEV 1 | CQ 4 | ndrange_kernel | running | KERNEL ID 6 | name=att_start
+4614639327813 | EV ID 1 | DEV 1 | CQ 4 | ndrange_kernel | complete | KERNEL ID 6 | name=att_start
+DEP | EV ID 2 -> EV ID 1
+DEP | EV ID 3 -> EV ID 1
+4614639412801 | EV ID 4 | DEV 1 | CQ 4 | read_buffer | queued | MEM ID 10 | size=960 | host_ptr=0x5ae021235440
+4614639453635 | EV ID 4 | DEV 1 | CQ 4 | read_buffer | submitted | MEM ID 10 | size=960 | host_ptr=0x5ae021235440
+4614639824710 | EV ID 4 | DEV 1 | CQ 4 | read_buffer | running | MEM ID 10 | size=960 | host_ptr=0x5ae021235440
+4614639824825 | EV ID 4 | DEV 1 | CQ 4 | read_buffer | complete | MEM ID 10 | size=960 | host_ptr=0x5ae021235440

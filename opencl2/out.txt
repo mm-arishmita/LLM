@@ -1,0 +1,283 @@
+#####################################################
+######  TESTING ATTENTION SCORE (FPGA / OpenCL) ####
+#####################################################
+No. of platforms detected: 1
+Selecting platform : Portable Computing Language
+[0;33m[REDEFINE_INTERFACE] REDEFINE device redefine is probed.
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE device redefine is available.
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE device is initialized.
+[0m[36m[Client] Initialized[0m
+[32m[Client] ✓ Application registered successfully[0m
+[0;33m[REDEFINE_INTERFACE] Application registered successfully (ID: 3)
+[0m[32m[Client] ✓ BindDevice: app=3, device=0[0m
+[36m         Device: pic_driver, Memory: 2GB[0m
+|     MMU     | INFO : MMU manager initialized successfully [LVL:INFO ]
+|     EWMU    | INFO : [EWMU INIT] Initialization successful - fd: 9, app_id: 0
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 4
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 0
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 5
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Application event created and registered successfully
+ [LVL:INFO ]
+[0;33m[REDEFINE_INTERFACE] Added first device 0 to application context
+[0mDevices found : 1 
+Device REDEFINE Accelerator
+No matching device found,defaulting to first deviceUsing device index 0 as fallback[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_init_queue 3.
+[0m[0;33m[REDEFINE_INTERFACE] Submission thread started
+[0m[0;33m[REDEFINE_INTERFACE] Initialized submission and monitor threads for command processing
+[0m[0;33m[REDEFINE_INTERFACE] Monitor thread started
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_init_queue 4.
+[0m 1 1 1 1024
+[32m[Client] ✓ AllocateMemory: addr=0x84000000, size=12288[0m
+[0;33m[REDEFINE_INTERFACE] Allocated 12288 bytes at 0x84000000
+[0m[32m[Client] ✓ AllocateMemory: addr=0x84003000, size=5120[0m
+[0;33m[REDEFINE_INTERFACE] Allocated 5120 bytes at 0x84003000
+[0m[32m[Client] ✓ AllocateMemory: addr=0x84005000, size=960[0m
+[0;33m[REDEFINE_INTERFACE] Allocated 960 bytes at 0x84005000
+[0m[32m[Client] ✓ AllocateMemory: addr=0x84006000, size=960[0m
+[0;33m[REDEFINE_INTERFACE] Allocated 960 bytes at 0x84006000
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_submit 3
+[0m[1;34m[QUEUE_DAG] === Pending Queue DAG Table ===[0m
+[QUEUE_DAG] Total nodes in pending queue: 1
+
+[1;34m┌─────────┬─────────────┬──────────────┬─────────────────┬─────────────────┬─────────────────────┬───────────────────────┐[0m
+[1;34m│ Node    │ Command     │ Event ID     │ PoCL Dependencies │ PoCL Dependents │ Redefine Dependencies │ Redefine Dependents │[0m
+[1;34m├─────────┼─────────────┼──────────────┼─────────────────┼─────────────────┼─────────────────────┼───────────────────────┤[0m
+│ 0       │ migrate_mem_objects │ 2            │ 0               │ 1               │ 0                   │ 0                   │
+[1;34m└─────────┴─────────────┴──────────────┴─────────────────┴─────────────────┴─────────────────────┴───────────────────────┘[0m
+
+[1;34m[QUEUE_DAG] === DAG Verification ===[0m
+[QUEUE_DAG] Node[0] Verification:
+[QUEUE_DAG]   PoCL Deps: 0, Redefine Deps: 0 [1;32m✓ MATCH[0m
+[QUEUE_DAG]   PoCL Dependents: 1, Redefine Dependents: 0 [1;31m✗ MISMATCH[0m
+[1;31m[QUEUE_DAG] ✗ DAG Verification FAILED - Count mismatches detected![0m
+[1;34m[QUEUE_DAG] === End DAG Dump ===[0m
+[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_submit 3
+[0m[1;34m[QUEUE_DAG] === Pending Queue DAG Table ===[0m
+[QUEUE_DAG] Total nodes in pending queue: 2
+
+[1;34m┌─────────┬─────────────┬──────────────┬─────────────────┬─────────────────┬─────────────────────┬───────────────────────┐[0m
+[1;34m│ Node    │ Command     │ Event ID     │ PoCL Dependencies │ PoCL Dependents │ Redefine Dependencies │ Redefine Dependents │[0m
+[1;34m├─────────┼─────────────┼──────────────┼─────────────────┼─────────────────┼─────────────────────┼───────────────────────┤[0m
+│ 0       │ migrate_mem_objects │ 2            │ 0               │ 2               │ 0                   │ 1                   │
+│ 1       │ migrate_mem_objects │ 3            │ 1               │ 1               │ 1                   │ 0                   │
+[1;34m└─────────┴─────────────┴──────────────┴─────────────────┴─────────────────┴─────────────────────┴───────────────────────┘[0m
+
+[1;34m[QUEUE_DAG] === DAG Verification ===[0m
+[QUEUE_DAG] Node[0] Verification:
+[QUEUE_DAG]   PoCL Deps: 0, Redefine Deps: 0 [1;32m✓ MATCH[0m
+[QUEUE_DAG]   PoCL Dependents: 2, Redefine Dependents: 1 [1;31m✗ MISMATCH[0m
+[QUEUE_DAG] Node[1] Verification:
+[QUEUE_DAG]   PoCL Deps: 1, Redefine Deps: 1 [1;32m✓ MATCH[0m
+[QUEUE_DAG]   PoCL Dependents: 1, Redefine Dependents: 0 [1;31m✗ MISMATCH[0m
+[1;31m[QUEUE_DAG] ✗ DAG Verification FAILED - Count mismatches detected![0m
+[1;34m[QUEUE_DAG] === End DAG Dump ===[0m
+[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_submit 4
+[0m[1;34m[QUEUE_DAG] === Pending Queue DAG Table ===[0m
+[QUEUE_DAG] Total nodes in pending queue: 3
+
+[1;34m┌─────────┬─────────────┬──────────────┬─────────────────┬─────────────────┬─────────────────────┬───────────────────────┐[0m
+[1;34m│ Node    │ Command     │ Event ID     │ PoCL Dependencies │ PoCL Dependents │ Redefine Dependencies │ Redefine Dependents │[0m
+[1;34m├─────────┼─────────────┼──────────────┼─────────────────┼─────────────────┼─────────────────────┼───────────────────────┤[0m
+│ 0       │ migrate_mem_objects │ 2            │ 0               │ 2               │ 0                   │ 2                   │
+│ 1       │ migrate_mem_objects │ 3            │ 1               │ 1               │ 1                   │ 1                   │
+│ 2       │ ndrange_kernel │ 1            │ 2               │ 0               │ 2                   │ 0                   │
+[1;34m└─────────┴─────────────┴──────────────┴─────────────────┴─────────────────┴─────────────────────┴───────────────────────┘[0m
+
+[1;34m[QUEUE_DAG] === DAG Verification ===[0m
+[QUEUE_DAG] Node[0] Verification:
+[QUEUE_DAG]   PoCL Deps: 0, Redefine Deps: 0 [1;32m✓ MATCH[0m
+[QUEUE_DAG]   PoCL Dependents: 2, Redefine Dependents: 2 [1;32m✓ MATCH[0m
+[QUEUE_DAG] Node[1] Verification:
+[QUEUE_DAG]   PoCL Deps: 1, Redefine Deps: 1 [1;32m✓ MATCH[0m
+[QUEUE_DAG]   PoCL Dependents: 1, Redefine Dependents: 1 [1;32m✓ MATCH[0m
+[QUEUE_DAG] Node[2] Verification:
+[QUEUE_DAG]   PoCL Deps: 2, Redefine Deps: 2 [1;32m✓ MATCH[0m
+[QUEUE_DAG]   PoCL Dependents: 0, Redefine Dependents: 0 [1;32m✓ MATCH[0m
+[1;32m[QUEUE_DAG] ✓ DAG Verification PASSED - All counts match![0m
+[1;34m[QUEUE_DAG] === End DAG Dump ===[0m
+[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_flush.
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_join.
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_wait_event event ID 1.
+[0m[0;33m[REDEFINE_INTERFACE] Migrate mem objects command registered
+[0m|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 4
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 20
+ [LVL:INFO ]
+[0;33m[REDEFINE_INTERFACE] Submission thread: command 0x56c0547ccff0 submitted and running
+[0m[0;33m[REDEFINE_INTERFACE] Migrate mem objects command registered
+[0m|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 4
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 20
+ [LVL:INFO ]
+[0;33m[REDEFINE_INTERFACE] Submission thread: command 0x56c05483cd80 submitted and running
+[0m[0;33m[REDEFINE_INTERFACE] NDRange kernel command registered
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_run.
+[0m[0;33m[REDEFINE_INTERFACE] Processing frame 0 (funcNum=4, kernelId=255, appId=3)
+[0m|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 0
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 5
+ [LVL:INFO ]
+[0;33m[REDEFINE_INTERFACE] Found matching event id 2
+[0m[0;33m[REDEFINE_INTERFACE] Processing migrate_mem_objects command
+[0mkernel binary path: /home/delli/.cache/pocl/kcache/BP/PEHNCNOBKJPDKPAAJIODPGDABGPOGHFEKCKIF/att_start/1-1-1-goffs0/att_start.so
+[0;33m[REDEFINE_INTERFACE] Calculated num_CRs from num_groups: 4
+[0m[0;33m[REDEFINE_INTERFACE] [INFO] DMA transfer completed, status: 0
+[0m|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 20
+ [LVL:INFO ]
+[0;33m[REDEFINE_INTERFACE] Processing frame 0 (funcNum=4, kernelId=255, appId=3)
+[0m|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 0
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 5
+ [LVL:INFO ]
+[0;33m[REDEFINE_INTERFACE] Found matching event id 3
+[0m[0;33m[REDEFINE_INTERFACE] Processing migrate_mem_objects command
+[0m[0;33m[REDEFINE_INTERFACE] [INFO] DMA transfer completed, status: 0
+[0m[32m[Client] ✓ AllocateKernel: kernel_id=0[0m
+[32m[Client] ✓ AllocateFabric: kernel=0, at (0,0) dim (2,2)[0m
+|     MMU     | INFO :   [IRANNA]cmd=0x00000001, addr=0x0000000002305000, len=1 [LVL:INFO ]
+|     MMU     | INFO :   kernel_id: 0, valid: 1, app_id: 3 [LVL:INFO ]
+|     MMU     | INFO :   kbcr_x: 0, kbcr_y: 0 [LVL:INFO ]
+|     MMU     | INFO :   ks_x: 2, ks_y: 2 [LVL:INFO ]
+|     MMU     | INFO : Kernel Configuration for kernel_id: 0, kernel_entry: 514 [LVL:INFO ]
+|     MMU     | INFO : Allocating stack segment memory
+ [LVL:INFO ]
+[32m[Client] ✓ AllocateMemory: addr=0x84007000, size=524288[0m
+[32m[Client] ✓ AllocateMemory: addr=0x84087000, size=1024[0m
+[32m[Client] ✓ AllocateMemory: addr=0x84088000, size=512[0m
+[32m[Client] ✓ AllocateMemory: addr=0x84089000, size=2048[0m
+[32m[Client] ✓ AllocateMemory: addr=0x8408a000, size=262144[0m
+[32m[Client] ✓ AllocateMemory: addr=0x840ca000, size=2097152[0m
+[32m[Client] ✓ AllocateMemory: addr=0x842ca000, size=4194304[0m
+[32m[Client] ✓ AllocateMemory: addr=0x846ca000, size=512[0m
+[32m[Client] ✓ AllocateMemory: addr=0x846cb000, size=1536[0m
+|     MMU     | INFO : Skipping non-LOAD segment TYPE 1685382481 [LVL:INFO ]
+|     MMU     | INFO : Skipping non-LOAD segment TYPE 1879048195 [LVL:INFO ]
+|     MMU     | INFO : Writing initialization data for 4 CR instances [LVL:INFO ]
+|     MMU     | INFO : Writing for CR 0 at physical address 0x840ca000 [LVL:INFO ]
+|     MMU     | INFO : Writing for CR 1 at physical address 0x8414a000 [LVL:INFO ]
+|     MMU     | INFO : Writing for CR 2 at physical address 0x841ca000 [LVL:INFO ]
+|     MMU     | INFO : Writing for CR 3 at physical address 0x8424a000 [LVL:INFO ]
+|     MMU     | INFO : Successfully wrote 16 64-bit initialization values for 4 CR instances [LVL:INFO ]
+[32m[Client] ✓ AllocateMemory: addr=0x846cc000, size=16[0m
+[32m[Client] ✓ AllocateMemory: addr=0x846cd000, size=4[0m
+[0;33m[REDEFINE_INTERFACE] [DEBUG] Processing argument 0
+[0m[0;33m[REDEFINE_INTERFACE] Pointer argument detected for arg 0
+[0m[0;33m[REDEFINE_INTERFACE] Mapped segment - Logical: 0x8001c00
+[0m[0;33m[REDEFINE_INTERFACE] Argument 0 stored at address: 0x84000000
+[0m[32m[Client] ✓ AllocateMemory: addr=0x846ce000, size=4[0m
+[0;33m[REDEFINE_INTERFACE] [DEBUG] Processing argument 1
+[0m[0;33m[REDEFINE_INTERFACE] Pointer argument detected for arg 1
+[0m[0;33m[REDEFINE_INTERFACE] Mapped segment - Logical: 0x8001c00
+[0m[0;33m[REDEFINE_INTERFACE] Argument 1 stored at address: 0x8c000000
+[0m[32m[Client] ✓ AllocateMemory: addr=0x846cf000, size=4[0m
+[0;33m[REDEFINE_INTERFACE] [DEBUG] Processing argument 2
+[0m[0;33m[REDEFINE_INTERFACE] Pointer argument detected for arg 2
+[0m[0;33m[REDEFINE_INTERFACE] Mapped segment - Logical: 0x8001c00
+[0m[0;33m[REDEFINE_INTERFACE] Argument 2 stored at address: 0x94000000
+[0m[32m[Client] ✓ AllocateMemory: addr=0x846d0000, size=4[0m
+[0;33m[REDEFINE_INTERFACE] [DEBUG] Processing argument 3
+[0m[0;33m[REDEFINE_INTERFACE] Pointer argument detected for arg 3
+[0m[0;33m[REDEFINE_INTERFACE] Mapped segment - Logical: 0x8001c00
+[0m[0;33m[REDEFINE_INTERFACE] Argument 3 stored at address: 0x9c000000
+[0m[0;33m[REDEFINE_INTERFACE] Arguments copied to device memory successfully
+[0m[0;33m[REDEFINE_INTERFACE] === kernel loading completed successfully ===
+[0m|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 4
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 20
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 4
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 20
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 20
+ [LVL:INFO ]
+[0;33m[REDEFINE_INTERFACE] Submission thread: command 0x56c0547d1570 submitted and running
+[0m|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 20
+ [LVL:INFO ]
+[0;33m[REDEFINE_INTERFACE] Processing frame 0 (funcNum=2, kernelId=255, appId=3)
+[0m|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 0
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 5
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 5
+ [LVL:INFO ]
+[32m[Client] ✓ DeallocateMemory: addr=0x846cd000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x846ce000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x846cf000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x846d0000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x846cc000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x84089000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x84007000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x842ca000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x8408a000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x840ca000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x846ca000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x84087000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x84088000[0m
+[32m[Client] ✓ DeallocateMemory: addr=0x846cb000[0m
+[32m[Client] ✓ DeallocateFabric: kernel=0[0m
+[32m[Client] ✓ DeallocateKernel: kernel_id=0[0m
+[0;33m[REDEFINE_INTERFACE] Found matching event id 1
+[0m[0;33m[REDEFINE_INTERFACE] Monitor: Broadcasting to flush waiters - queues empty
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_flush.
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_submit 4
+[0m[1;34m[QUEUE_DAG] === Pending Queue DAG Table ===[0m
+[QUEUE_DAG] Total nodes in pending queue: 1
+
+[1;34m┌─────────┬─────────────┬──────────────┬─────────────────┬─────────────────┬─────────────────────┬───────────────────────┐[0m
+[1;34m│ Node    │ Command     │ Event ID     │ PoCL Dependencies │ PoCL Dependents │ Redefine Dependencies │ Redefine Dependents │[0m
+[1;34m├─────────┼─────────────┼──────────────┼─────────────────┼─────────────────┼─────────────────────┼───────────────────────┤[0m
+│ 0       │ read_buffer │ 4            │ 0               │ 0               │ 0                   │ 0                   │
+[1;34m└─────────┴─────────────┴──────────────┴─────────────────┴─────────────────┴─────────────────────┴───────────────────────┘[0m
+
+[1;34m[QUEUE_DAG] === DAG Verification ===[0m
+[QUEUE_DAG] Node[0] Verification:
+[QUEUE_DAG]   PoCL Deps: 0, Redefine Deps: 0 [1;32m✓ MATCH[0m
+[QUEUE_DAG]   PoCL Dependents: 0, Redefine Dependents: 0 [1;32m✓ MATCH[0m
+[1;32m[QUEUE_DAG] ✓ DAG Verification PASSED - All counts match![0m
+[1;34m[QUEUE_DAG] === End DAG Dump ===[0m
+[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_flush.
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_join.
+[0m[0;33m[REDEFINE_INTERFACE] Read buffer command registered
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_wait_event event ID 4.
+[0m|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 4
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 20
+ [LVL:INFO ]
+[0;33m[REDEFINE_INTERFACE] Submission thread: command 0x56c0547c9f20 submitted and running
+[0m[0;33m[REDEFINE_INTERFACE] Processing frame 0 (funcNum=4, kernelId=255, appId=3)
+[0m|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 0
+ [LVL:INFO ]
+|     EWMU    | INFO : [EWMU] Request successfully enqueued with opcode: 5
+ [LVL:INFO ]
+[0;33m[REDEFINE_INTERFACE] Found matching event id 4
+[0m[0;33m[REDEFINE_INTERFACE] pocl_redefine_read
+[0m[0;33m[REDEFINE_INTERFACE] [INFO] DMA transfer completed, status: 0
+[0m[0;33m[REDEFINE_INTERFACE] Monitor: Broadcasting to flush waiters - queues empty
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_flush.
+[0mAttention Score computation successful.
+[32m[Client] ✓ DeallocateMemory: addr=0x84000000[0m
+[0;33m[REDEFINE_INTERFACE] Memory successfully freed
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_flush.
+[0m[32m[Client] ✓ DeallocateMemory: addr=0x84003000[0m
+[0;33m[REDEFINE_INTERFACE] Memory successfully freed
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_flush.
+[0m[32m[Client] ✓ DeallocateMemory: addr=0x84005000[0m
+[0;33m[REDEFINE_INTERFACE] Memory successfully freed
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_flush.
+[0m[32m[Client] ✓ DeallocateMemory: addr=0x84006000[0m
+[0;33m[REDEFINE_INTERFACE] Memory successfully freed
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_flush.
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_flush.
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_free_queue 4.
+[0m[0;33m[REDEFINE_INTERFACE] Submission thread exiting normally
+[0m[0;33m[REDEFINE_INTERFACE] Monitor thread exiting
+[0m[0;33m[REDEFINE_INTERFACE] Submission thread terminated
+[0m[0;33m[REDEFINE_INTERFACE] Monitor thread terminated
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_flush.
+[0m[0;33m[REDEFINE_INTERFACE] REDEFINE pocl_redefine_free_queue 3.
+[0m
