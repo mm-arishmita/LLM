@@ -276,7 +276,7 @@ static int run_wsum(void)
                                 CL_TRUE, 0, sz_ctx,
                                 Ctx,
                                 0, NULL, &read_event);
-    checkErr(error, "clEnqueueReadBuffer dev_Scores");
+    checkErr(error, "clEnqueueReadBuffer dev_ctx");
 
     double read_ms = profile_event_elapsed_ms(read_event);
     clReleaseEvent(read_event);
