@@ -352,7 +352,7 @@ static int run_rmsnorm(LayerDebug *dbg)
                 if (output[b][s][i] != dbg->rms2_out[i]) {
 //#if DEBUG_CODE
                     //printf("dbg.rms2_out[%d][%d][%d] = %+2.5f is not equal to output[%d][%d][%d] = %+2.5f\n",
-                           b, s, i, dbg->rms2_out[i], b, s, i, output[b][s][i]);
+                           //b, s, i, dbg->rms2_out[i], b, s, i, output[b][s][i]);
 //#endif
                 } else {
                     valid++;
