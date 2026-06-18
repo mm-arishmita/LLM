@@ -77,12 +77,41 @@ float cos_lim(float x) {
 }
 #endif
 
+#ifdef CUSTOM_TRIG
+// Approximate log and exp with higher accuracy
+static float my_logf(float x) {
+    // Use a polynomial approximation around 1
+    float y = (x - 1.0f) / (x + 1.0f);
+    float y2 = y * y;
+    // Padé-style expansion for better accuracy
+    return 2.0f * (y + (y2*y)/3.0f + (y2*y2*y)/5.0f + (y2*y2*y2*y)/7.0f);
+}
+
+static float my_expf(float x) {
+    // 7-term Taylor expansion
+    float x2 = x * x;
+    float x3 = x2 * x;
+    float x4 = x3 * x;
+    float x5 = x4 * x;
+    float x6 = x5 * x;
+    return 1.0f + x + x2/2.0f + x3/6.0f + x4/24.0f + x5/120.0f + x6/720.0f;
+}
+
+// Custom powf: a^b
+float my_powf(float a, float b) {
+    return my_expf(b * my_logf(a));
+}
+#endif
+
+
 #if CUSTOM_TRIG
 #define SIN(x) sin_lim(x)
 #define COS(x) cos_lim(x)
+#define POW(a, b) my_powf(a, b)
 #else
 #define SIN(x) sinf(x)
 #define COS(x) cosf(x)
+#define POW(a, b) powf(a, b)
 #endif
  
 
@@ -177,7 +206,7 @@ __hyperOp__ void InvFreqOp(__Op32 cosFr, __Op32 sinFr) {
 
     for (int i = 0; i < HALF; i++) {
         float exponent = (2.0f * (float)i) / (float)ROTARY_DIM;
-        inv_freq[i] = 1.0f / powf(ROPE_THETA, exponent);
+        inv_freq[i] = 1.0f / POW(ROPE_THETA, exponent);
     }
 
     /* Signal CosCache: inv_freq[] is ready. */
