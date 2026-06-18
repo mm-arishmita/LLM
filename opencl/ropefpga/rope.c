@@ -41,6 +41,117 @@ __CMAddr _endKernelEventId;
 /* Floating point type used for all tensors. */
 typedef float mat_t;
 
+#define CUSTOM_TRIG 1
+
+///CUSTOM SINF COSF//
+#ifdef CUSTOM_TRIG
+#define TWO_OVER_PI 0.6366197723675814f
+#define PI_2_A 1.5703125f
+#define PI_2_B 0.0004838267923332751f
+#define PI_2_C 2.5632829192545614e-12f
+
+static float round_nearest(float x) {
+    if (x >= 0.0f) {
+        return (float)(long)(x + 0.5f);
+    } else {
+        return (float)(long)(x - 0.5f);
+    }
+}
+static void range_reduce_quad(float x, float *r_out, int *quadrant) {
+    float k = round_nearest(x * TWO_OVER_PI);
+ 
+    float r = x - k * PI_2_A;
+    r = r - k * PI_2_B;
+    r = r - k * PI_2_C;
+ 
+    *r_out = r;
+ 
+    long ki = (long)k;
+    int q = (int)(ki % 4);
+    if (q < 0) q += 4;
+    *quadrant = q;
+}
+static float sin_small(float r) {
+    float r2 = r * r;
+    return r * (0.9999966f +
+           r2 * (-0.16664824f +
+           r2 * (0.00830629f +
+           r2 * (-0.00018363f))));
+}
+static float cos_small(float r) {
+    float r2 = r * r;
+    return 0.99999934f +
+           r2 * (-0.49999125f +
+           r2 * (0.04166204f +
+           r2 * (-0.00133527f +
+           r2 * (0.00002314f))));
+}
+
+float sin_lim(float x) {
+    float r;
+    int q;
+    range_reduce_quad(x, &r, &q);
+ 
+    switch (q) {
+        case 0: return  sin_small(r);
+        case 1: return  cos_small(r);
+        case 2: return -sin_small(r);
+        default: return -cos_small(r);  /* q == 3 */
+    }
+}
+ 
+float cos_lim(float x) {
+    float r;
+    int q;
+    range_reduce_quad(x, &r, &q);
+ 
+    switch (q) {
+        case 0: return  cos_small(r);
+        case 1: return -sin_small(r);
+        case 2: return -cos_small(r);
+        default: return  sin_small(r);  /* q == 3 */
+    }
+}
+#endif
+
+#ifdef CUSTOM_TRIG
+// Approximate log and exp with higher accuracy
+static float my_logf(float x) {
+    // Use a polynomial approximation around 1
+    float y = (x - 1.0f) / (x + 1.0f);
+    float y2 = y * y;
+    // Padé-style expansion for better accuracy
+    return 2.0f * (y + (y2*y)/3.0f + (y2*y2*y)/5.0f + (y2*y2*y2*y)/7.0f);
+}
+
+static float my_expf(float x) {
+    // 7-term Taylor expansion
+    float x2 = x * x;
+    float x3 = x2 * x;
+    float x4 = x3 * x;
+    float x5 = x4 * x;
+    float x6 = x5 * x;
+    return 1.0f + x + x2/2.0f + x3/6.0f + x4/24.0f + x5/120.0f + x6/720.0f;
+}
+
+// Custom powf: a^b
+float my_powf(float a, float b) {
+    return my_expf(b * my_logf(a));
+}
+#endif
+
+
+#if CUSTOM_TRIG
+#define SIN(x) sin_lim(x)
+#define COS(x) cos_lim(x)
+#define POW(a, b) my_powf(a, b)
+#else
+#define SIN(x) sinf(x)
+#define COS(x) cosf(x)
+#define POW(a, b) powf(a, b)
+#endif
+ 
+
 /* =============================================================================
  * HYPEROP FUNCTION DECLARATIONS
  * =============================================================================*/
@@ -120,7 +231,7 @@ __hyperOp__ void InvFreqOp(__Op32 cosFr, __Op32 sinFr) {
 
     for (int i = 0; i < HALF; i++) {
         float exponent = (2.0f * (float)i) / (float)ROTARY_DIM;
-        inv_freq[i] = 1.0f / powf(ROPE_THETA, exponent);
+        inv_freq[i] = 1.0f / POW(ROPE_THETA, exponent);
     }
 
     /* Signal CosCache: inv_freq[] is ready. */
@@ -136,7 +247,7 @@ __hyperOp__ void CosCacheOp(__Op32 ropeFr) {
 
     for (int i = 0; i < HALF; i++) {
         float angle = inv_freq[i] * (float)position;
-        cos_cache[i] = cosf(angle);
+        cos_cache[i] = COS(angle);
     }
     /* Signal RoPELaunch: cos_cache[] is ready. */
     __sync(ropeFr.cmAddr, -1);
@@ -148,7 +259,7 @@ __hyperOp__ void SinCacheOp(__Op32 ropeFr) {
 
     for (int i = 0; i < HALF; i++) {
         float angle = inv_freq[i] * (float)position;
-        sin_cache[i] = sinf(angle);
+        sin_cache[i] = SIN(angle);
     }
     /* Signal RoPELaunch: sin_cache[] is ready. */
     __sync(ropeFr.cmAddr, -1);
