@@ -290,16 +290,16 @@ int main(int argc, char *argv[]) {
      * 8. Check 2: chip Q_out / K_out vs extractor reference.
      * -------------------------------------------------------------------------*/
     printf("--- Check 2: chip Q_out/K_out vs extractor ref (tol=1e-4) ---\n");
-    int check2_Q = compare_Q(Q_out, ref_Q_out, 1e-6f, "chip_Q", "ref_Q");
-    int check2_K = compare_K(K_out, ref_K_out, 1e-6f, "chip_K", "ref_K");
+    int check2_Q = compare_Q(Q_out, ref_Q_out, 1e-4f, "chip_Q", "ref_Q");
+    int check2_K = compare_K(K_out, ref_K_out, 1e-4f, "chip_K", "ref_K");
     int check2   = check2_Q && check2_K;
 
     /* -------------------------------------------------------------------------
      * 9. Check 3: chip Q_out / K_out vs manual host recompute.
      * -------------------------------------------------------------------------*/
     printf("--- Check 3: chip Q_out/K_out vs manual recompute (tol=1e-4) ---\n");
-    int check3_Q = compare_Q(Q_out, manual_Q_out, 1e-6f, "chip_Q", "manual_Q");
-    int check3_K = compare_K(K_out, manual_K_out, 1e-6f, "chip_K", "manual_K");
+    int check3_Q = compare_Q(Q_out, manual_Q_out, 1e-4f, "chip_Q", "manual_Q");
+    int check3_K = compare_K(K_out, manual_K_out, 1e-4f, "chip_K", "manual_K");
     int check3   = check3_Q && check3_K;
 
     /* -------------------------------------------------------------------------

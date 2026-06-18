@@ -8,29 +8,78 @@
 #define CUSTOM_TRIG 1
 
 #ifdef CUSTOM_TRIG
-#define PI 3.14159265358979323846f
-#define TWO_PI (2.0f * PI)
+#define TWO_OVER_PI 0.6366197723675814f
+#define PI_2_A 1.5703125f
+#define PI_2_B 0.0004838267923332751f
+#define PI_2_C 2.5632829192545614e-12f
 
-static float wrap_angle(float x) {
-    while (x > PI)  x -= TWO_PI;
-    while (x < -PI) x += TWO_PI;
-    return x;
+static float round_nearest(float x) {
+    if (x >= 0.0f) {
+        return (float)(long)(x + 0.5f);
+    } else {
+        return (float)(long)(x - 0.5f);
+    }
+}
+static void range_reduce_quad(float x, float *r_out, int *quadrant) {
+    float k = round_nearest(x * TWO_OVER_PI);
+ 
+    float r = x - k * PI_2_A;
+    r = r - k * PI_2_B;
+    r = r - k * PI_2_C;
+ 
+    *r_out = r;
+ 
+    long ki = (long)k;
+    int q = (int)(ki % 4);
+    if (q < 0) q += 4;
+    *quadrant = q;
+}
+static float sin_small(float r) {
+    float r2 = r * r;
+    return r * (0.9999966f +
+           r2 * (-0.16664824f +
+           r2 * (0.00830629f +
+           r2 * (-0.00018363f))));
+}
+static float cos_small(float r) {
+    float r2 = r * r;
+    return 0.99999934f +
+           r2 * (-0.49999125f +
+           r2 * (0.04166204f +
+           r2 * (-0.00133527f +
+           r2 * (0.00002314f))));
 }
 
-float my_sinf(float x) {
-    x = wrap_angle(x);
-    float x2 = x * x;
-    return x * (1.0f - x2/6.0f + (x2*x2)/120.0f - (x2*x2*x2)/5040.0f);
+float sin_lim(float x) {
+    float r;
+    int q;
+    range_reduce_quad(x, &r, &q);
+ 
+    switch (q) {
+        case 0: return  sin_small(r);
+        case 1: return  cos_small(r);
+        case 2: return -sin_small(r);
+        default: return -cos_small(r);  /* q == 3 */
+    }
 }
-
-float my_cosf(float x) {
-    return my_sinf(x + PI/2.0f);
+ 
+float cos_lim(float x) {
+    float r;
+    int q;
+    range_reduce_quad(x, &r, &q);
+ 
+    switch (q) {
+        case 0: return  cos_small(r);
+        case 1: return -sin_small(r);
+        case 2: return -cos_small(r);
+        default: return  sin_small(r);  /* q == 3 */
+    }
 }
 #endif
 
 #if CUSTOM_TRIG
-#define SIN(x) my_sinf(x)
-#define COS(x) my_cosf(x)
+#define SIN(x) sin_lim(x)
+#define COS(x) cos_lim(x)
 #else
 #define SIN(x) sinf(x)
 #define COS(x) cosf(x)
