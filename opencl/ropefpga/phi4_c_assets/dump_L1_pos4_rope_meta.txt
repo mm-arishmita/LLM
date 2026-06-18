@@ -1,0 +1,18 @@
+layer=1
+token_pos=4
+position=4
+n_q_heads=24
+n_kv_heads=8
+head_dim=128
+rotary_dim=96
+half=48
+rope_theta=10000.0
+
+File layout (all float32, row-major):
+  Q_in.bin  : [24][128]   Q before RoPE
+  K_in.bin  : [8][128]   K before RoPE (NOT GQA-expanded)
+  Q_out.bin : [24][128]   Q after  RoPE (golden reference)
+  K_out.bin : [8][128]   K after  RoPE (golden reference)
+
+Compile with:
+  -DN_Q_HEADS=24 -DN_KV_HEADS=8 -DHEAD_DIM=128 -DROTARY_DIM=96 -DROPE_THETA=10000.0 -DPOSITION=4
