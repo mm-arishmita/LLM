@@ -39,7 +39,7 @@ static mat_t score [BATCH_SIZE][HEAD_NUM][Q_LEN][K_LEN];
 static mat_t output[BATCH_SIZE][HEAD_NUM][Q_LEN][K_LEN];
 
 //#ifndef DEBUG_CODE
-#//define DEBUG_CODE 0
+//define DEBUG_CODE 0
 //#endif
 
 /* =============================================================================
