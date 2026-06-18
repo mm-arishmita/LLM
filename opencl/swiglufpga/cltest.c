@@ -39,7 +39,7 @@ static mat_t output [BATCH_SIZE][SEQ_LEN][HIDDEN_SIZE];
 //#define DEBUG_CODE 0
 //#endif
 
-* =============================================================================
+/*=============================================================================
  * TIMING / PROFILING HELPERS
  * =============================================================================*/
 static double host_time_ms(void)
@@ -199,7 +199,8 @@ static int run_swiglu(float *dbg_out)
     /* ------------------------------------------------------------------
      * Upload score (timed via profiling event)
      * ------------------------------------------------------------------ */
-    cl_event write_score_event = NULL;
+    cl_event write_gate_event = NULL;
+    cl_event write_up_event = NULL;
 
     error = clEnqueueWriteBuffer(cmdqId, dev_gate, CL_FALSE, 0,
                                  sz_gate, gate, 0, NULL, &write_gate_event);
@@ -213,7 +214,7 @@ static int run_swiglu(float *dbg_out)
     checkErr(error, "clFinish (after write)");
 
     double write_ms = profile_event_elapsed_ms(write_gate_event);
-                    + profile_event_elapsed_ms(write_up_event)
+                    + profile_event_elapsed_ms(write_up_event);
     
     clReleaseEvent(write_gate_event);
     clReleaseEvent(write_up_event);
