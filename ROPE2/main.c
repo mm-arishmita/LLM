@@ -143,8 +143,8 @@ static int compare_Q(const mat_t a[N_Q_HEADS][HEAD_DIM],
             float diff = fabsf(a[h][d] - b[h][d]);
             if (diff > tol) {
                 ok = 0;
-                printf("[MISMATCH] Q h=%d d=%d : %s=%.8f  %s=%.8f  diff=%.2e\n",
-                       h, d, label_a, a[h][d], label_b, b[h][d], diff);
+                //printf("[MISMATCH] Q h=%d d=%d : %s=%.8f  %s=%.8f  diff=%.2e\n",
+                      // h, d, label_a, a[h][d], label_b, b[h][d], diff);
             }
         }
     }
