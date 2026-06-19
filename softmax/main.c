@@ -101,6 +101,9 @@ int main() {
               float diff = fabsf(output[b][h][q][k] - dbg_output[k]);
               if(diff > tol){
                 printf("outputs dont match");
+              }else{
+                valid++;
+              }
 //#if DEBUG_CODE
             //printf(
                 //"dbg_output[%d] = %+1.16f is not equal to "
@@ -114,7 +117,6 @@ int main() {
         }
       }
     }
-  }
 
   printf("Valid: %d\n", valid);
   if(valid == K_LEN)
