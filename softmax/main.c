@@ -98,7 +98,7 @@ int main() {
         for(int k = 0; k < K_LEN; k++) {
           if(output[b][h][q][k] != dbg_output[k]) {
               float tol = 1e-6f;
-              float diff = fabsf(output[b][h][q][k] - dbg_output[b][h][q][k]);
+              float diff = fabsf(output[b][h][q][k] - dbg_output[k]);
               if(diff > tol){
                 printf("outputs dont match");
 //#if DEBUG_CODE
