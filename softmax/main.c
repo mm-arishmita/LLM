@@ -92,31 +92,21 @@ int main() {
 
   // Check output validity.
   int valid = 0;
+  float tol = 1e-6f;
   for(int b = 0; b < BATCH_SIZE; b++) {
     for(int h = 0; h < HEAD_NUM; h++) {
       for(int q = 0; q < Q_LEN; q++) {
         for(int k = 0; k < K_LEN; k++) {
-          if(output[b][h][q][k] != dbg_output[k]) {
-              float tol = 1e-6f;
-              float diff = fabsf(output[b][h][q][k] - dbg_output[k]);
-              if(diff > tol){
-                printf("outputs dont match");
-              }else{
-                valid++;
-              }
-//#if DEBUG_CODE
-            //printf(
-                //"dbg_output[%d] = %+1.16f is not equal to "
-                //"output[%d][%d][%d][%d] = %+1.16f\n",
-                //k, dbg_output[k], b, h, q, k, output[b][h][q][k]);
-//#endif
-          } else {
+          float diff = fabsf(output[b][h][q][k] - dbg_output[k]);
+          if(diff <= tol) {
             valid++;
-            }
-          }
+         } else {
+          printf("outputs dont match\n");
+         }
         }
       }
     }
+  }
 
   printf("Valid: %d\n", valid);
   if(valid == K_LEN)
