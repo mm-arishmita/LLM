@@ -362,7 +362,7 @@ static int run_rmsnorm(LayerDebug *dbg)
     }
 
     printf("Valid: %d\n", valid);
-    if (valid == HIDDEN_SIZE)
+    if (valid == BATCH_SIZE * SEQ_LEN* HIDDEN_SIZE)
         printf("RMSNorm successful.\n");
     else
         printf("RMSNorm unsuccessful!\n");

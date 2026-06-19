@@ -278,7 +278,7 @@ static int run_softmax(float *dbg_output)
     }
 
     printf("Valid: %d\n", valid);
-    if (valid == K_LEN)
+    if (valid == BATCH_SIZE * K_LEN * HEAD_NUM * Q_LEN)
         printf("Softmax successful.\n");
     else
         printf("Softmax unsuccessful!\n");
