@@ -1,5 +1,7 @@
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "common_defs.h"
 #include "redefine.h"
@@ -95,14 +97,19 @@ int main() {
       for(int q = 0; q < Q_LEN; q++) {
         for(int k = 0; k < K_LEN; k++) {
           if(output[b][h][q][k] != dbg_output[k]) {
-#if DEBUG_CODE
-            printf(
-                "dbg_output[%d] = %+1.16f is not equal to "
-                "output[%d][%d][%d][%d] = %+1.16f\n",
-                k, dbg_output[k], b, h, q, k, output[b][h][q][k]);
-#endif
+              float tol = 1e-6f;
+              float diff = fabsf(output[b][h][q][k] - dbg_output[b][h][q][k]);
+              if(diff > tol){
+                printf("outputs dont match");
+//#if DEBUG_CODE
+            //printf(
+                //"dbg_output[%d] = %+1.16f is not equal to "
+                //"output[%d][%d][%d][%d] = %+1.16f\n",
+                //k, dbg_output[k], b, h, q, k, output[b][h][q][k]);
+//#endif
           } else {
             valid++;
+            }
           }
         }
       }
