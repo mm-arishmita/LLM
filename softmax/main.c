@@ -97,11 +97,16 @@ int main() {
     for(int h = 0; h < HEAD_NUM; h++) {
       for(int q = 0; q < Q_LEN; q++) {
         for(int k = 0; k < K_LEN; k++) {
-          float diff = fabsf(output[b][h][q][k] - dbg_output[k]);
-          if(diff <= tol) {
+          if(output[b][h][q][k]!=dbg_output[k]){
+            float diff = fabsf(output[b][h][q][k] - dbg_output[k]);
+            if(diff <= tol) {
             valid++;
-         } else {
-          printf("outputs dont match\n");
+          }else{
+            printf("outputs dont match");
+          }
+        }
+         else {
+          valid++;
          }
         }
       }
@@ -109,7 +114,7 @@ int main() {
   }
 
   printf("Valid: %d\n", valid);
-  if(valid == K_LEN)
+  if(valid == K_LEN * HEAD_NUM)
     printf("Softmax successful.\n");
   else
     printf("Softmax unsuccessful!\n");
