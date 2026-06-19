@@ -98,6 +98,7 @@ int main() {
       for(int q = 0; q < Q_LEN; q++) {
         for(int k = 0; k < K_LEN; k++) {
           if(output[b][h][q][k]!=dbg_output[k]){
+            printf("not exact match");
             float diff = fabsf(output[b][h][q][k] - dbg_output[k]);
             if(diff <= tol) {
             valid++;
