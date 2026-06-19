@@ -5,7 +5,7 @@
 #define PASS 0
 #define FAIL 1
 
-#define CUSTOM_TRIG 1
+//#define CUSTOM_TRIG 1
 
 #ifdef CUSTOM_TRIG
 #define TWO_OVER_PI 0.6366197723675814f
