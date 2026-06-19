@@ -22,5 +22,5 @@ $(OUTNAME).elf : $(objects)
 %.o : %.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
-rope.o      : rope.c rope.h
+rope.o      : rope2.c rope.h
 main.o : main.c rope.h
