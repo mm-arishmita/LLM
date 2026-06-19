@@ -253,8 +253,8 @@ int main(int argc, char *argv[]) {
      *    Catches any load/layout mismatch or formula divergence.
      * -------------------------------------------------------------------------*/
     printf("--- Check 1: manual_out vs extractor ref_out (tol=1e-4) ---\n");
-    int check1_Q = compare_Q(manual_Q_out, ref_Q_out, 1e-4f, "manual_Q", "ref_Q");
-    int check1_K = compare_K(manual_K_out, ref_K_out, 1e-4f, "manual_K", "ref_K");
+    int check1_Q = compare_Q(manual_Q_out, ref_Q_out, 1e-6f, "manual_Q", "ref_Q");
+    int check1_K = compare_K(manual_K_out, ref_K_out, 1e-6f, "manual_K", "ref_K");
     int check1   = check1_Q && check1_K;
     if (check1)
         printf("  PASS: manual recompute matches extractor reference.\n\n");
