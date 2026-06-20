@@ -193,14 +193,14 @@ int main(int argc, char *argv[]) {
      * 7. Check chip output vs extractor reference ctx.
      * -------------------------------------------------------------------------*/
     printf("--- Check 2: chip Ctx vs extractor ref_ctx (tol=1e-4) ---\n");
-    int check2 = compare_ctx(Ctx, ref_ctx, 1e-4f,
+    int check2 = compare_ctx(Ctx, ref_ctx, 1e-5f,
                              "chip", "ref");
 
     /* -------------------------------------------------------------------------
      * 8. Also check chip vs manual (belt-and-suspenders).
      * -------------------------------------------------------------------------*/
     printf("--- Check 3: chip Ctx vs manual_ctx (tol=1e-4) ---\n");
-    int check3 = compare_ctx(Ctx, manual_ctx, 1e-4f,
+    int check3 = compare_ctx(Ctx, manual_ctx, 1e-5f,
                              "chip", "manual");
 
     /* -------------------------------------------------------------------------
