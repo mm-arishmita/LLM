@@ -196,9 +196,9 @@ __hyperOp__ void WtSumOp(__Op32 head_id,     __Op32 ce_id,
     /* For each dim d in this CE's chunk, accumulate weighted sum over all tokens.
      * Double accumulator matches reference C implementation precision.          */
     for (int d = lo; d < hi; d++) {
-        double acc = 0.0;
+        float acc = 0.0;
         for (int tok = 0; tok < SEQ_LEN; tok++) {
-            acc += (double)Scores[h][tok] * (double)V[h][tok][d];
+            acc += (float)Scores[h][tok] * (float)V[h][tok][d];
         }
         /* Write partial result to CE's own slice — no race condition.           */
         partials_v[h][ce][d] = (float)acc;
@@ -233,9 +233,9 @@ __hyperOp__ void ReduceCtx(__Op32 head_id, __Op32 endFr) {
      * partials_v[h][ce][d] is non-zero only where CE ce was responsible for d,
      * so the sum across CEs gives the correct full Ctx[h][d].                 */
     for (int d = 0; d < HEAD_DIM; d++) {
-        double acc = 0.0;
+        float acc = 0.0;
         for (int ce = 0; ce < CE_USE_NUM; ce++) {
-            acc += (double)partials_v[h][ce][d];
+            acc += (float)partials_v[h][ce][d];
         }
         Ctx[h][d] = (float)acc;
     }

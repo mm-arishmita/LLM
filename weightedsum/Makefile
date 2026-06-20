@@ -2,7 +2,7 @@
 #/bin/bash
 OUTNAME := $(notdir $(shell pwd))
 DEBUG ?= 0
-SEQ_LEN ?= 2
+SEQ_LEN ?= 20
 
 -include ../../redefine_sdk/mm-redefine/REDEFINE/baremetal_examples/env.mk
 

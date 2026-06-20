@@ -35,9 +35,9 @@ mat_t manual_ctx[ATTN_HEADS][HEAD_DIM];
 static void manual_weighted_sum() {
     for (int h = 0; h < ATTN_HEADS; h++) {
         for (int d = 0; d < HEAD_DIM; d++) {
-            double acc = 0.0;
+            float acc = 0.0;
             for (int tok = 0; tok < SEQ_LEN; tok++) {
-                acc += (double)Scores[h][tok] * (double)V[h][tok][d];
+                acc += (float)Scores[h][tok] * (float)V[h][tok][d];
             }
             manual_ctx[h][d] = (float)acc;
 
