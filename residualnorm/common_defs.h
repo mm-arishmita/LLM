@@ -4,7 +4,7 @@
 #define HIDDEN_SIZE 3072
 
 #define BATCH_SIZE 1
-#define SEQ_LEN 1
+#define SEQ_LEN 100
 
 typedef float mat_t;
 
