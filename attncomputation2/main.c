@@ -145,8 +145,8 @@ int main(int argc, char *argv[]) {
     /* -------------------------------------------------------------------------
      * 5. Check manual vs extractor reference  (catches load/layout errors).
      * -------------------------------------------------------------------------*/
-    printf("--- Check 1: manual_scores vs extractor ref_scores (tol=1e-4) ---\n");
-    int check1 = compare_scores(manual_scores, ref_scores, 1e-4f,
+    printf("--- Check 1: manual_scores vs extractor ref_scores (tol=1e-5) ---\n");
+    int check1 = compare_scores(manual_scores, ref_scores, 1e-5f,
                                 "manual", "ref");
     if (check1)
         printf("  PASS: manual recompute matches extractor reference.\n\n");
@@ -179,15 +179,15 @@ int main(int argc, char *argv[]) {
     /* -------------------------------------------------------------------------
      * 7. Check chip output vs extractor reference scores.
      * -------------------------------------------------------------------------*/
-    printf("--- Check 2: chip Scores vs extractor ref_scores (tol=1e-4) ---\n");
-    int check2 = compare_scores(Scores, ref_scores, 1e-4f,
+    printf("--- Check 2: chip Scores vs extractor ref_scores (tol=1e-5) ---\n");
+    int check2 = compare_scores(Scores, ref_scores, 1e-5f,
                                 "chip", "ref");
 
     /* -------------------------------------------------------------------------
      * 8. Also check chip vs manual (belt-and-suspenders).
      * -------------------------------------------------------------------------*/
-    printf("--- Check 3: chip Scores vs manual_scores (tol=1e-4) ---\n");
-    int check3 = compare_scores(Scores, manual_scores, 1e-4f,
+    printf("--- Check 3: chip Scores vs manual_scores (tol=1e-5) ---\n");
+    int check3 = compare_scores(Scores, manual_scores, 1e-5f,
                                 "chip", "manual");
 
     /* -------------------------------------------------------------------------

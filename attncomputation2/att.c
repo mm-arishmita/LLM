@@ -159,9 +159,9 @@ __hyperOp__ void MulOp(__Op32 head_id,  __Op32 tok_id, __Op32 ce_id,
 
     /* Partial dot product: Q[h][lo..hi) · K[t][lo..hi)
      * Double accumulator matches reference C implementation precision.     */
-    double acc = 0.0;
+    float acc = 0.0;
     for (int d = lo; d < hi; d++) {
-        acc += (double)Q[h][d] * (double)K[h][t][d];
+        acc += (float)Q[h][d] * (float)K[h][t][d];
     }
 
     /* Write partial result to scratch buffer. */
@@ -187,14 +187,14 @@ __hyperOp__ void ReduceSum(__Op32 head_id, __Op32 tok_id, __Op32 endFr) {
     }
 
     /* Accumulate all CE partial dot products. */
-    double dot = 0.0;
+    float dot = 0.0;
     for (int ce = 0; ce < CE_USE_NUM; ce++) {
-        dot += (double)partials[h][t][ce];
+        dot += (float)partials[h][t][ce];
     }
 
     /* Apply attention scale: score = dot(Q[h], K[t]) / sqrt(HEAD_DIM). */
     float inv_sqrt_dim = 1.0f / sqrtf((float)HEAD_DIM);
-    Scores[h][t] = (float)(dot * (double)inv_sqrt_dim);
+    Scores[h][t] = (float)(dot * (float)inv_sqrt_dim);
 
     /* Signal End: this (head, token) score is finalised. */
     __sync(endFr.cmAddr, -1);
