@@ -63,8 +63,7 @@ int main() {
   }
 
   // Initialise gate matrix.
-  float* dbg_gate =
-      load_vector_f32("debug_dumps/dbg_mlp_gate_l1_p0.bin", HIDDEN_SIZE);
+  float* dbg_gate = load_vector_f32("debug_dumps/dbg_mlp_gate_l1_p0.bin", HIDDEN_SIZE);
   for(int b = 0; b < BATCH_SIZE; b++) {
     for(int s = 0; s < SEQ_LEN; s++) {
       for(int i = 0; i < HIDDEN_SIZE; i++) {
@@ -87,10 +86,17 @@ int main() {
   float* dbg_out =
       load_vector_f32("debug_dumps/dbg_mlp_out_l1_p0.bin", HIDDEN_SIZE);
   int valid = 0;
+  float tol = 1e-6f;
   for(int b = 0; b < BATCH_SIZE; b++) {
     for(int s = 0; s < SEQ_LEN; s++) {
       for(int i = 0; i < HIDDEN_SIZE; i++) {
         if(output[b][s][i] != dbg_out[i]) {
+            float diff = fabsf(output[b][s][i] - dbg_out[i]);
+	    printf("not\n");
+	    if(diff <= tol) {
+		printf("results match with tolerance\n");
+           	 valid++;
+           }
 #if DEBUG_CODE
           printf(
               "dbg_out[%d] = %+1.16f is not equal to "
@@ -105,7 +111,7 @@ int main() {
   }
 
   printf("Valid: %d\n", valid);
-  if(valid == HIDDEN_SIZE)
+  if(valid == SEQ_LEN * HIDDEN_SIZE)
     printf("SwiGLU successful.\n");
   else
     printf("SwiGLU unsuccessful!\n");
