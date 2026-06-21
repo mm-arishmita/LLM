@@ -98,7 +98,7 @@ endif
 # att_fpga.c is the kernel source loaded at runtime via clCreateProgramWithSource
 # — it is NOT compiled here, just needs to be present alongside the binary.
 # -----------------------------------------------------------------------------
-SRCS = cltest.c common.c
+SRCS = cltest2.c common.c
 
 # -----------------------------------------------------------------------------
 # Build rules
