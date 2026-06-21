@@ -18,7 +18,7 @@
 /* HELPER FUNCTIONS AND DEFINITIONS */
 
 // Whether to use custom exponentiation function or not.
-//#define CUSTOM_EXP
+// #define CUSTOM_EXP
 
 #ifdef CUSTOM_EXP
 float exp_coeff[11] = {1.0f,

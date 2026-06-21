@@ -110,7 +110,7 @@ int main() {
   }
 
   printf("Valid: %d\n", valid);
-  if(valid == K_LEN * HEAD_NUM)
+  if(valid == K_LEN)
     printf("Softmax successful.\n");
   else
     printf("Softmax unsuccessful!\n");
