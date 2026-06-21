@@ -7,7 +7,7 @@ POSITION ?= 4
 
 CPPFLAGS += -Wall -DDEBUG_CODE=$(DEBUG) -DPOSITION=$(POSITION)
 
-commonObjs = rope.o
+commonObjs = rope2.o
 
 ifneq ($(TARGET), isasim)
         objects = main.o $(commonObjs)
@@ -22,5 +22,5 @@ $(OUTNAME).elf : $(objects)
 %.o : %.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
-rope.o      : rope2.c rope.h
+rope2.o      : rope2.c rope.h
 main.o : main.c rope.h
