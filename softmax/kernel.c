@@ -222,7 +222,7 @@ __hyperOp__ void Sum(__Op32 batch_id, __Op32 head_id, __Op32 query_id,
   }
 
   // Calculate inverse of the sum.
-  float inv_exp_sum = 1.0f / exp_sum;
+  float inv_exp_sum = exp_sum;
 
   // Create Softmax HyperOps.
   for(int i = 0; i < USAGE_SIZE; i++) {
@@ -258,7 +258,7 @@ __hyperOp__ void Softmax(__Op32 batch_id, __Op32 head_id, __Op32 query_id,
   // Perform Softmax on each element.
   for(int k = (int)base.i32; k < (int)bound.i32; k++) {
     output[batch][head][query][k] =
-        exp_vec[batch][head][query][k] * exp_scale.f32;
+        exp_vec[batch][head][query][k] / exp_scale.f32;
   }
 
   // Decrement synchronisation wait count for End HyperOp.
