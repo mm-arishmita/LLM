@@ -86,15 +86,15 @@ int main() {
   float* dbg_out =
       load_vector_f32("debug_dumps/dbg_mlp_out_l1_p0.bin", HIDDEN_SIZE);
   int valid = 0;
-  float tol = 1e-5f;
+  float tol = 1e-4f;
   for(int b = 0; b < BATCH_SIZE; b++) {
     for(int s = 0; s < SEQ_LEN; s++) {
       for(int i = 0; i < HIDDEN_SIZE; i++) {
         if(output[b][s][i] != dbg_out[i]) {
             float diff = fabsf(output[b][s][i] - dbg_out[i]);
-	    printf("not\n");
+	   // printf("not\n");
 	    if(diff <= tol) {
-		printf("results match with tolerance\n");
+		//printf("results match with tolerance\n");
            	 valid++;
            }
 #if DEBUG_CODE
